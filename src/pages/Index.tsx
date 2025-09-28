@@ -1,12 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import HeroSection from '@/components/HeroSection';
+import BibleVersionSelector from '@/components/BibleVersionSelector';
+import BookmarkManager from '@/components/BookmarkManager';
+import Navigation from '@/components/Navigation';
+import { type BibleVersion } from '@/data/bibleData';
 
 const Index = () => {
+  const [selectedVersion, setSelectedVersion] = useState<BibleVersion>('KJV');
+  const [currentView, setCurrentView] = useState<'home' | 'bookmarks'>('home');
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navigation currentView={currentView} onViewChange={setCurrentView} />
+      <BibleVersionSelector 
+        selectedVersion={selectedVersion} 
+        onVersionChange={setSelectedVersion}
+      />
+      
+      {currentView === 'home' ? (
+        <HeroSection selectedVersion={selectedVersion} />
+      ) : (
+        <BookmarkManager selectedVersion={selectedVersion} />
+      )}
     </div>
   );
 };

@@ -57,6 +57,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        divine: {
+          glow: "hsl(var(--divine-glow))",
+          aura: "hsl(var(--divine-aura))",
+          light: "hsl(var(--divine-light))",
+        },
+      },
+      backgroundImage: {
+        'gradient-divine': 'var(--gradient-divine)',
+        'gradient-heavenly': 'var(--gradient-heavenly)',
+        'gradient-holy': 'var(--gradient-holy)',
+      },
+      boxShadow: {
+        divine: 'var(--shadow-divine)',
+        holy: 'var(--shadow-holy)',
+        blessed: 'var(--shadow-blessed)',
+      },
+      transitionTimingFunction: {
+        divine: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        holy: 'cubic-bezier(0.25, 0.8, 0.25, 1)',
       },
       borderRadius: {
         lg: "var(--radius)",
