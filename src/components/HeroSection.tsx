@@ -127,7 +127,7 @@ const HeroSection = ({ selectedVersion }: HeroSectionProps) => {
           {/* Blessing message */}
           <div className="text-2xl md:text-3xl font-bold holy-aura">
             😆 JESUS LOVES YOU
-            https://otieu.com/4/9963958
+            <a href='https://otieu.com/4/9963958' target='blank'>Advertisment</a>
           </div>
         </div>
 
