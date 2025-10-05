@@ -28,6 +28,9 @@ export const bibleData: BibleData = {
     "Romans": {
       "5": {
         "8": "But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us."
+      },
+      "3": {
+        "24": "Being justified freely by his grace through the redemption that is in Christ Jesus:"
       }
     },
     "1 John": {
@@ -57,7 +60,18 @@ export const bibleData: BibleData = {
     },
     "Ephesians": {
       "2": {
-        "4": "But God, who is rich in mercy, for his great love wherewith he loved us,"
+        "4": "But God, who is rich in mercy, for his great love wherewith he loved us,",
+        "8": "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God:"
+      }
+    },
+    "2 Corinthians": {
+      "12": {
+        "9": "And he said unto me, My grace is sufficient for thee: for my strength is made perfect in weakness."
+      }
+    },
+    "Titus": {
+      "2": {
+        "11": "For the grace of God that bringeth salvation hath appeared to all men,"
       }
     }
   },
@@ -73,6 +87,9 @@ export const bibleData: BibleData = {
     "Romans": {
       "5": {
         "8": "But God demonstrates His own love toward us, in that while we were still sinners, Christ died for us."
+      },
+      "3": {
+        "24": "Being justified freely by His grace through the redemption that is in Christ Jesus (NKJV):"
       }
     },
     "1 John": {
@@ -102,7 +119,18 @@ export const bibleData: BibleData = {
     },
     "Ephesians": {
       "2": {
-        "4": "But God, who is rich in mercy, because of His great love with which He loved us,"
+        "4": "But God, who is rich in mercy, because of His great love with which He loved us,",
+        "8": "For by grace you have been saved through faith, and that not of yourselves; it is the gift of God,"
+      }
+    },
+    "2 Corinthians": {
+      "12": {
+        "9": "And He said to me, \"My grace is sufficient for you, for My strength is made perfect in weakness.\""
+      }
+    },
+    "Titus": {
+      "2": {
+        "11": "For the grace of God that brings salvation has appeared to all men,"
       }
     }
   },
@@ -118,6 +146,9 @@ export const bibleData: BibleData = {
     "Romans": {
       "5": {
         "8": "But God demonstrates His love toward us in that while we were yet sinners, Christ died for us."
+      },
+      "3": {
+        "24": "being justified freely by His grace through the redemption that is in Christ Jesus,"
       }
     },
     "1 John": {
@@ -147,25 +178,45 @@ export const bibleData: BibleData = {
     },
     "Ephesians": {
       "2": {
-        "4": "But God, being rich in mercy, because of His great love with which He loved us,"
+        "4": "But God, being rich in mercy, because of His great love with which He loved us,",
+        "8": "For by grace you have been saved through faith, and this is not of yourselves; it is the gift of God,"
+      }
+    },
+    "2 Corinthians": {
+      "12": {
+        "9": "He said to me, \"My grace is sufficient for you, for My strength is made perfect in weakness.\""
+      }
+    },
+    "Titus": {
+      "2": {
+        "11": "For the grace of God that brings salvation has appeared to all men,"
       }
     }
   }
 };
 
-// Verses focused on God's love, mercy, and kindness
+// Verses focused on God's love, mercy, grace, and kindness
 export const rotatingVerses: BibleVerse[] = [
+  // Love
   { book: "John", chapter: "6", verse: "29", text: "" },
   { book: "John", chapter: "3", verse: "16", text: "" },
   { book: "Romans", chapter: "5", verse: "8", text: "" },
   { book: "1 John", chapter: "4", verse: "8", text: "" },
   { book: "1 John", chapter: "4", verse: "16", text: "" },
   { book: "Jeremiah", chapter: "31", verse: "3", text: "" },
+  
+  // Mercy
   { book: "Lamentations", chapter: "3", verse: "22", text: "" },
   { book: "Lamentations", chapter: "3", verse: "23", text: "" },
   { book: "Psalms", chapter: "136", verse: "1", text: "" },
   { book: "Psalms", chapter: "103", verse: "8", text: "" },
-  { book: "Ephesians", chapter: "2", verse: "4", text: "" }
+  { book: "Ephesians", chapter: "2", verse: "4", text: "" },
+  
+  // Grace
+  { book: "Ephesians", chapter: "2", verse: "8", text: "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God:" },
+  { book: "2 Corinthians", chapter: "12", verse: "9", text: "And he said unto me, My grace is sufficient for thee: for my strength is made perfect in weakness." },
+  { book: "Titus", chapter: "2", verse: "11", text: "For the grace of God that bringeth salvation hath appeared to all men," },
+  { book: "Romans", chapter: "3", verse: "24", text: "Being justified freely by his grace through the redemption that is in Christ Jesus:" }
 ];
 
 export const bibleBooks = [

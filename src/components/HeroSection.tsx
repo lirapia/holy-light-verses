@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { bibleData, rotatingVerses, type BibleVersion } from '@/data/bibleData';
+import BibleCatalog from './BibleCatalog';
 
 // Simple animation helper instead of anime.js for now
 const animateElement = (element: HTMLElement, animations: any[], duration: number = 1000) => {
@@ -93,46 +94,54 @@ const HeroSection = ({ selectedVersion }: HeroSectionProps) => {
   const verseText = bibleData[selectedVersion]?.[verse.book]?.[verse.chapter]?.[verse.verse] || '';
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-4">
       {/* Animated background */}
       <div className="absolute inset-0 blessed-container">
         <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
       </div>
 
-      {/* Main hero content */}
-      <div 
-        ref={heroRef}
-        className="relative z-10 text-center max-w-4xl mx-auto px-6 opacity-0 transition-all duration-1000 translate-y-12"
-      >
-        {/* Divine title */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-8 holy-aura">
-          Holy Bible
-        </h1>
-
-        {/* Verse container */}
-        <div 
-          ref={verseRef}
-          className="rounded-2xl p-8 md:p-12 bg-card/10 backdrop-blur-sm border border-divine-glow/20 opacity-0 transition-all duration-800 scale-90"
-        >
-          {/* Verse text */}
-          <blockquote className="text-xl md:text-3xl font-medium leading-relaxed verse-glow mb-6">
-            "{verseText}"
-          </blockquote>
-
-          {/* Verse reference */}
-          <cite className="text-lg md:text-xl font-semibold text-divine-aura block mb-4">
-            ({verse.book} {verse.chapter}:{verse.verse})
-          </cite>
-
-          {/* Blessing message */}
-          <div className="text-2xl md:text-3xl font-bold holy-aura">
-            😆 JESUS LOVES YOU
-          </div>
+      {/* Two Column Layout */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+        {/* Left Column - Bible Catalog */}
+        <div className="h-[600px] md:h-[700px]">
+          <BibleCatalog />
         </div>
 
-        {/* Version indicator */}
-        <div className="mt-8 text-sm text-muted-foreground">
-          Reading from {selectedVersion}
+        {/* Right Column - Verse Display */}
+        <div 
+          ref={heroRef}
+          className="flex flex-col justify-center opacity-0 transition-all duration-1000 translate-y-12"
+        >
+          {/* Divine title */}
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 holy-aura text-center">
+            Holy Bible
+          </h1>
+
+          {/* Verse container */}
+          <div 
+            ref={verseRef}
+            className="rounded-2xl p-6 md:p-10 bg-card/10 backdrop-blur-sm border border-divine-glow/20 opacity-0 transition-all duration-800 scale-90"
+          >
+            {/* Verse text */}
+            <blockquote className="text-lg md:text-2xl font-medium leading-relaxed verse-glow mb-6 text-center">
+              "{verseText}"
+            </blockquote>
+
+            {/* Verse reference */}
+            <cite className="text-base md:text-lg font-semibold text-divine-aura block mb-4 text-center">
+              ({verse.book} {verse.chapter}:{verse.verse})
+            </cite>
+
+            {/* Blessing message */}
+            <div className="text-xl md:text-2xl font-bold holy-aura text-center">
+              😆 JESUS LOVES YOU
+            </div>
+          </div>
+
+          {/* Version indicator */}
+          <div className="mt-6 text-sm text-muted-foreground text-center">
+            Reading from {selectedVersion}
+          </div>
         </div>
       </div>
 

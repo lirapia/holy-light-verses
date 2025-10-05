@@ -8,50 +8,50 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Divine Theme - Dark with Golden Accents */
-    --background: 225 39% 7%;
-    --foreground: 43 96% 90%;
+    /* Light Theme - Divine Light Mode */
+    --background: 43 100% 97%;
+    --foreground: 225 39% 15%;
 
-    --card: 225 25% 12%;
-    --card-foreground: 43 96% 90%;
+    --card: 43 100% 100%;
+    --card-foreground: 225 39% 15%;
 
-    --popover: 225 25% 12%;
-    --popover-foreground: 43 96% 90%;
+    --popover: 43 100% 100%;
+    --popover-foreground: 225 39% 15%;
 
-    --primary: 43 96% 70%;
-    --primary-foreground: 225 39% 7%;
+    --primary: 43 96% 50%;
+    --primary-foreground: 43 100% 100%;
 
-    --secondary: 225 20% 18%;
-    --secondary-foreground: 43 96% 90%;
+    --secondary: 43 30% 92%;
+    --secondary-foreground: 225 39% 15%;
 
-    --muted: 225 20% 18%;
-    --muted-foreground: 43 30% 65%;
+    --muted: 43 30% 92%;
+    --muted-foreground: 225 20% 40%;
 
-    --accent: 43 96% 70%;
-    --accent-foreground: 225 39% 7%;
+    --accent: 43 96% 50%;
+    --accent-foreground: 43 100% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 225 20% 18%;
-    --input: 225 20% 18%;
-    --ring: 43 96% 70%;
+    --border: 43 30% 85%;
+    --input: 43 30% 85%;
+    --ring: 43 96% 50%;
 
-    /* Divine Design Tokens */
-    --divine-glow: 43 96% 70%;
-    --divine-aura: 43 80% 60%;
-    --divine-light: 43 100% 85%;
-    --holy-shadow: 43 96% 70%;
+    /* Divine Design Tokens - Light Mode */
+    --divine-glow: 43 96% 50%;
+    --divine-aura: 43 80% 40%;
+    --divine-light: 43 100% 60%;
+    --holy-shadow: 43 96% 50%;
     
     /* Gradients */
     --gradient-divine: linear-gradient(135deg, hsl(var(--divine-glow)), hsl(var(--divine-aura)));
-    --gradient-heavenly: radial-gradient(circle, hsl(var(--divine-light) / 0.3), transparent 70%);
-    --gradient-holy: linear-gradient(45deg, hsl(var(--divine-glow) / 0.2), hsl(var(--divine-aura) / 0.1));
+    --gradient-heavenly: radial-gradient(circle, hsl(var(--divine-light) / 0.2), transparent 70%);
+    --gradient-holy: linear-gradient(45deg, hsl(var(--divine-glow) / 0.15), hsl(var(--divine-aura) / 0.1));
     
     /* Shadows & Effects */
-    --shadow-divine: 0 0 40px hsl(var(--divine-glow) / 0.5);
-    --shadow-holy: 0 0 20px hsl(var(--divine-glow) / 0.3);
-    --shadow-blessed: 0 10px 30px hsl(var(--divine-glow) / 0.2);
+    --shadow-divine: 0 0 40px hsl(var(--divine-glow) / 0.3);
+    --shadow-holy: 0 0 20px hsl(var(--divine-glow) / 0.2);
+    --shadow-blessed: 0 10px 30px hsl(var(--divine-glow) / 0.15);
     
     /* Animation Timing */
     --transition-divine: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -59,21 +59,14 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 43 100% 98%;
+    --sidebar-foreground: 225 39% 15%;
+    --sidebar-primary: 43 96% 50%;
+    --sidebar-primary-foreground: 43 100% 100%;
+    --sidebar-accent: 43 30% 92%;
+    --sidebar-accent-foreground: 225 39% 15%;
+    --sidebar-border: 43 30% 85%;
+    --sidebar-ring: 43 96% 50%;
   }
 
   .dark {
@@ -115,8 +108,15 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(135deg, hsl(var(--background)), hsl(225 39% 5%));
     min-height: 100vh;
+  }
+
+  :root {
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(43 100% 95%));
+  }
+
+  .dark {
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(225 39% 5%));
   }
 
   /* Divine Animation Classes */

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, BookOpen, Menu, X } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 interface NavigationProps {
   currentView: 'home' | 'bookmarks';
@@ -50,6 +51,7 @@ const Navigation = ({ currentView, onViewChange }: NavigationProps) => {
             {label}
           </Button>
         ))}
+        <ThemeToggle />
       </div>
     </nav>
   );
