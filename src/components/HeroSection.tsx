@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { bibleData, rotatingVerses, type BibleVersion } from '@/data/bibleData';
-import BibleCatalog from './BibleCatalog';
+import BibleReader from './BibleReader';
 
 // Simple animation helper instead of anime.js for now
 const animateElement = (element: HTMLElement, animations: any[], duration: number = 1000) => {
@@ -102,9 +102,9 @@ const HeroSection = ({ selectedVersion }: HeroSectionProps) => {
 
       {/* Two Column Layout */}
       <div className="relative z-10 w-full max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-start">
-        {/* Left Column - Bible Catalog */}
+        {/* Left Column - Bible Reader */}
         <div className="h-[600px] md:h-[700px]">
-          <BibleCatalog />
+          <BibleReader />
         </div>
 
         {/* Right Column - Verse Display */}
