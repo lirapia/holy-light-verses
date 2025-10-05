@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Book, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { Book, ChevronRight, ChevronLeft, Loader2, Bookmark } from 'lucide-react';
 import { bookChapterCounts, fetchChapter, type BibleChapter } from '@/services/bibleApi';
 import { useToast } from '@/hooks/use-toast';
+import { useBookmarks } from '@/hooks/useBookmarks';
+import { type BibleVersion } from '@/data/bibleData';
 
 interface BibleReaderProps {
   onSelectBook?: (book: string) => void;
+  selectedVersion?: BibleVersion;
 }
 
 const oldTestament = [
@@ -28,7 +31,7 @@ const newTestament = [
 
 type ViewMode = 'testament' | 'books' | 'chapters' | 'verses';
 
-const BibleReader = ({ onSelectBook }: BibleReaderProps) => {
+const BibleReader = ({ onSelectBook, selectedVersion = 'KJV' }: BibleReaderProps) => {
   const [selectedTestament, setSelectedTestament] = useState<'old' | 'new'>('old');
   const [selectedBook, setSelectedBook] = useState<string | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
@@ -36,6 +39,7 @@ const BibleReader = ({ onSelectBook }: BibleReaderProps) => {
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('testament');
   const { toast } = useToast();
+  const { addBookmark } = useBookmarks();
 
   const currentBooks = selectedTestament === 'old' ? oldTestament : newTestament;
 
@@ -52,7 +56,13 @@ const BibleReader = ({ onSelectBook }: BibleReaderProps) => {
     setSelectedChapter(chapter);
     
     try {
-      const data = await fetchChapter(selectedBook, chapter);
+      const versionMap: Record<string, string> = {
+        'KJV': 'kjv',
+        'NKJV': 'kjv',
+        'MEV': 'kjv'
+      };
+      const apiVersion = versionMap[selectedVersion] || 'kjv';
+      const data = await fetchChapter(selectedBook, chapter, apiVersion);
       setChapterData(data);
       setViewMode('verses');
     } catch (error) {
@@ -65,6 +75,18 @@ const BibleReader = ({ onSelectBook }: BibleReaderProps) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBookmarkVerse = (verse: { verse: number; text: string }) => {
+    if (!selectedBook || !selectedChapter) return;
+
+    addBookmark({
+      title: `${selectedBook} ${selectedChapter}:${verse.verse}`,
+      version: selectedVersion,
+      book: selectedBook,
+      chapter: String(selectedChapter),
+      verses: [String(verse.verse)]
+    });
   };
 
   const handleBack = () => {
@@ -200,15 +222,24 @@ const BibleReader = ({ onSelectBook }: BibleReaderProps) => {
               {chapterData.verses.map((verse) => (
                 <div
                   key={verse.verse}
-                  className="p-4 rounded-lg bg-card/20 border border-divine-glow/10 hover:border-divine-glow/20 transition-colors"
+                  className="group p-4 rounded-lg bg-card/20 border border-divine-glow/10 hover:border-divine-glow/20 transition-colors"
                 >
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 items-start">
                     <span className="font-bold text-primary text-lg flex-shrink-0">
                       {verse.verse}
                     </span>
-                    <p className="text-foreground leading-relaxed">
+                    <p className="text-foreground leading-relaxed flex-1">
                       {verse.text}
                     </p>
+                    <Button
+                      onClick={() => handleBookmarkVerse(verse)}
+                      variant="ghost"
+                      size="sm"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                      title="Bookmark this verse"
+                    >
+                      <Bookmark className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               ))}

@@ -104,7 +104,7 @@ const HeroSection = ({ selectedVersion }: HeroSectionProps) => {
       <div className="relative z-10 w-full max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-start">
         {/* Left Column - Bible Reader */}
         <div className="h-[600px] md:h-[700px]">
-          <BibleReader />
+          <BibleReader selectedVersion={selectedVersion} />
         </div>
 
         {/* Right Column - Verse Display */}
