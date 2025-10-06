@@ -228,30 +228,50 @@ const BibleReader = ({ onSelectBook, selectedVersion = 'KJV' }: BibleReaderProps
         ) : (
           <ScrollArea className="flex-1">
             <div className="space-y-4 pr-4">
-              {chapterData.verses.map((verse) => (
-                <div
-                  key={verse.verse}
-                  className="group p-4 rounded-lg bg-card/20 border border-divine-glow/10 hover:border-divine-glow/20 transition-colors"
-                >
-                  <div className="flex gap-3 items-start">
-                    <span className="font-bold text-primary text-lg flex-shrink-0">
-                      {verse.verse}
-                    </span>
-                    <p className="text-foreground leading-relaxed flex-1">
-                      {verse.text}
-                    </p>
-                    <Button
-                      onClick={() => handleBookmarkVerse(verse)}
-                      variant="ghost"
-                      size="sm"
-                      className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                      title="Bookmark this verse"
-                    >
-                      <Bookmark className="w-4 h-4" />
-                    </Button>
+              {chapterData.verses.map((verse) => {
+                // Simple detection for Jesus's words (quotes)
+                const hasQuotes = verse.text.includes('"') || verse.text.includes('"') || verse.text.includes('"');
+                
+                return (
+                  <div
+                    key={verse.verse}
+                    className="group relative p-4 rounded-lg bg-card/40 hover:bg-card/60 transition-all duration-300 border border-divine-glow/10 hover:border-divine-glow/30"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-divine-glow/20 text-divine-glow font-semibold text-sm">
+                        {verse.verse}
+                      </span>
+                      <p className={`flex-1 leading-relaxed ${hasQuotes ? 'font-serif text-lg' : 'text-foreground/90'}`}>
+                        {verse.text.split(/("[^"]*"|"[^"]*"|"[^"]*")/).map((part, i) => {
+                          if (part.startsWith('"') || part.startsWith('"') || part.startsWith('"')) {
+                            // Words of Jesus - styled elegantly in red letter edition style
+                            return (
+                              <span 
+                                key={i}
+                                className="text-red-500 dark:text-red-400 font-semibold italic relative inline-block"
+                                style={{ 
+                                  textShadow: '0 0 20px rgba(239, 68, 68, 0.3)',
+                                }}
+                              >
+                                {part}
+                              </span>
+                            );
+                          }
+                          return <span key={i}>{part}</span>;
+                        })}
+                      </p>
+                      <Button
+                        onClick={() => handleBookmarkVerse(verse)}
+                        variant="ghost"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Bookmark className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </ScrollArea>
         )}

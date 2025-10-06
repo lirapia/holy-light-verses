@@ -12,14 +12,23 @@ export interface Bookmark {
   verses: string[];
   createdAt: string;
   text?: string;
+  collection?: string;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  createdAt: string;
 }
 
 export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
     loadBookmarks();
+    loadCollections();
   }, []);
 
   const loadBookmarks = () => {
@@ -30,6 +39,26 @@ export const useBookmarks = () => {
       }
     } catch (error) {
       console.error('Error loading bookmarks:', error);
+    }
+  };
+
+  const loadCollections = () => {
+    try {
+      const saved = localStorage.getItem('bible-collections');
+      if (saved) {
+        setCollections(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error('Error loading collections:', error);
+    }
+  };
+
+  const saveCollections = (newCollections: Collection[]) => {
+    try {
+      localStorage.setItem('bible-collections', JSON.stringify(newCollections));
+      setCollections(newCollections);
+    } catch (error) {
+      console.error('Error saving collections:', error);
     }
   };
 
@@ -73,7 +102,36 @@ export const useBookmarks = () => {
     });
   };
 
-  const exportBookmarks = async () => {
+  const addCollection = (name: string) => {
+    const newCollection: Collection = {
+      id: crypto.randomUUID(),
+      name,
+      createdAt: new Date().toISOString()
+    };
+    const updated = [...collections, newCollection];
+    saveCollections(updated);
+    toast({
+      title: "Collection Created",
+      description: `"${name}" collection has been created`,
+    });
+    return newCollection.id;
+  };
+
+  const removeCollection = (id: string) => {
+    const updated = collections.filter(c => c.id !== id);
+    saveCollections(updated);
+    // Remove collection from bookmarks
+    const updatedBookmarks = bookmarks.map(b => 
+      b.collection === id ? { ...b, collection: undefined } : b
+    );
+    saveBookmarks(updatedBookmarks);
+    toast({
+      title: "Collection Removed",
+      description: "Collection has been deleted",
+    });
+  };
+
+  const exportBookmarks = async (exportTitle?: string) => {
     try {
       toast({
         title: "Preparing Export",
@@ -108,12 +166,22 @@ export const useBookmarks = () => {
         })
       );
 
-      const data = JSON.stringify(bookmarksWithContent, null, 2);
+      const exportData = {
+        title: exportTitle || 'My Bible Bookmarks',
+        exportedAt: new Date().toISOString(),
+        bookmarks: bookmarksWithContent,
+        collections: collections
+      };
+
+      const data = JSON.stringify(exportData, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `bible-bookmarks-${new Date().toISOString().split('T')[0]}.json`;
+      const filename = exportTitle 
+        ? `${exportTitle.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`
+        : `bible-bookmarks-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -137,15 +205,42 @@ export const useBookmarks = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const imported = JSON.parse(e.target?.result as string) as Bookmark[];
+        const importedData = JSON.parse(e.target?.result as string);
+        
+        // Support both old and new format
+        let importedBookmarks: Bookmark[];
+        let importedCollections: Collection[] = [];
+        
+        if (Array.isArray(importedData)) {
+          // Old format: just array of bookmarks
+          importedBookmarks = importedData;
+        } else {
+          // New format: object with bookmarks and collections
+          importedBookmarks = importedData.bookmarks || [];
+          importedCollections = importedData.collections || [];
+        }
         
         // Validate imported data structure
-        const validBookmarks = imported.filter(b => 
+        const validBookmarks = importedBookmarks.filter(b => 
           b.title && b.version && b.book && b.chapter && b.verses && Array.isArray(b.verses)
         );
 
         if (validBookmarks.length === 0) {
           throw new Error('No valid bookmarks found');
+        }
+
+        // Import collections first
+        if (importedCollections.length > 0) {
+          const existingCollectionNames = new Set(collections.map(c => c.name));
+          const newCollections = importedCollections.filter(c => !existingCollectionNames.has(c.name));
+          if (newCollections.length > 0) {
+            const updatedCollections = [...collections, ...newCollections.map(c => ({
+              ...c,
+              id: crypto.randomUUID(),
+              createdAt: c.createdAt || new Date().toISOString()
+            }))];
+            saveCollections(updatedCollections);
+          }
         }
 
         // Merge with existing bookmarks (avoid duplicates by title)
@@ -162,7 +257,7 @@ export const useBookmarks = () => {
 
         toast({
           title: "✅ Bookmarks Successfully Imported!",
-          description: `Imported ${newBookmarks.length} new bookmarks`,
+          description: `Imported ${newBookmarks.length} bookmarks${importedCollections.length > 0 ? ` and ${importedCollections.length} collections` : ''}`,
         });
       } catch (error) {
         console.error('Error importing bookmarks:', error);
@@ -178,9 +273,12 @@ export const useBookmarks = () => {
 
   return {
     bookmarks,
+    collections,
     addBookmark,
     removeBookmark,
     exportBookmarks,
-    importBookmarks
+    importBookmarks,
+    addCollection,
+    removeCollection
   };
 };
