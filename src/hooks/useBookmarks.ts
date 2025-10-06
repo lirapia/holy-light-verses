@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { type BibleVersion } from '@/data/bibleData';
 import { useToast } from '@/hooks/use-toast';
+import { fetchVerse } from '@/services/bibleApi';
 
 export interface Bookmark {
   id: string;
@@ -10,6 +11,7 @@ export interface Bookmark {
   chapter: string;
   verses: string[];
   createdAt: string;
+  text?: string;
 }
 
 export const useBookmarks = () => {
@@ -71,9 +73,42 @@ export const useBookmarks = () => {
     });
   };
 
-  const exportBookmarks = () => {
+  const exportBookmarks = async () => {
     try {
-      const data = JSON.stringify(bookmarks, null, 2);
+      toast({
+        title: "Preparing Export",
+        description: "Fetching verse content...",
+      });
+
+      // Fetch verse content for each bookmark
+      const versionMap: Record<string, string> = {
+        'KJV': 'kjv',
+        'NKJV': 'kjv',
+        'MEV': 'kjv'
+      };
+
+      const bookmarksWithContent = await Promise.all(
+        bookmarks.map(async (bookmark) => {
+          try {
+            const apiVersion = versionMap[bookmark.version] || 'kjv';
+            const verseData = await fetchVerse(
+              bookmark.book,
+              parseInt(bookmark.chapter),
+              parseInt(bookmark.verses[0]),
+              apiVersion
+            );
+            return {
+              ...bookmark,
+              text: verseData.text
+            };
+          } catch (error) {
+            console.error(`Failed to fetch verse for ${bookmark.title}:`, error);
+            return bookmark;
+          }
+        })
+      );
+
+      const data = JSON.stringify(bookmarksWithContent, null, 2);
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -86,7 +121,7 @@ export const useBookmarks = () => {
 
       toast({
         title: "📥 Export Successful",
-        description: "Bookmarks have been exported",
+        description: "Bookmarks with verse content have been exported",
       });
     } catch (error) {
       console.error('Error exporting bookmarks:', error);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Book, ChevronRight, ChevronLeft, Loader2, Bookmark } from 'lucide-react';
@@ -38,8 +38,17 @@ const BibleReader = ({ onSelectBook, selectedVersion = 'KJV' }: BibleReaderProps
   const [chapterData, setChapterData] = useState<BibleChapter | null>(null);
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('testament');
+  const [previousVersion, setPreviousVersion] = useState<BibleVersion>(selectedVersion);
   const { toast } = useToast();
   const { addBookmark } = useBookmarks();
+
+  // Reload chapter when version changes
+  useEffect(() => {
+    if (previousVersion !== selectedVersion && selectedBook && selectedChapter) {
+      setPreviousVersion(selectedVersion);
+      handleChapterSelect(selectedChapter);
+    }
+  }, [selectedVersion]);
 
   const currentBooks = selectedTestament === 'old' ? oldTestament : newTestament;
 
